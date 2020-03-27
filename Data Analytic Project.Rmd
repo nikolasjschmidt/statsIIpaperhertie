@@ -1,0 +1,859 @@
+---
+title: "Attitudes towards the Euro in non-Euro new EU Member States"
+author: "Nikolas Schmidt"
+date: "8 Januar 2018"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    number_sections: yes
+  html_document:
+    df_print: paged
+linestretch: 1.5
+fontsize: 11pt
+---
+
+```{r setup, include=FALSE}
+setwd("C:/Users/Niko/Google Drive/2 Bildung/3 Hertie/4 FS 2017/Stats/Final Paper/Data Analytic Project")
+source("packages.r")
+source("functions.r")
+
+library(tidyverse)
+library(knitr)
+library(foreign)
+library(haven)
+library(dplyr)
+
+# Importing 2017 data, dropping not needed variables and relabeling variables
+
+data_2017 <- haven::read_dta("2017.dta")
+
+data_2017_new <- dplyr::select(data_2017, country, q9, q10_1, q10_2, q11, q12, q13, q14_3, q14_4, d1, d1r1, d2, d4, d13)
+
+data_2017_new$year <- rep(2017, nrow(data_2017_new))
+names(data_2017_new)[names(data_2017_new) == 'country'] <- 'country'
+names(data_2017_new)[names(data_2017_new) == 'q9'] <- 'prev_imp'
+names(data_2017_new)[names(data_2017_new) == 'q10_1'] <- 'conseq_country'
+names(data_2017_new)[names(data_2017_new) == 'q10_2'] <- 'conseq_you'
+names(data_2017_new)[names(data_2017_new) == 'q11'] <- 'eurosupp'
+names(data_2017_new)[names(data_2017_new) == 'q12'] <- 'intro_time_want'
+names(data_2017_new)[names(data_2017_new) == 'q13'] <- 'price_impact'
+names(data_2017_new)[names(data_2017_new) == 'q14_3'] <- 'lose_econpol'
+names(data_2017_new)[names(data_2017_new) == 'q14_4'] <- 'lose_ident'
+names(data_2017_new)[names(data_2017_new) == 'd1'] <- 'age'
+names(data_2017_new)[names(data_2017_new) == 'd1r1'] <- 'agecat'
+names(data_2017_new)[names(data_2017_new) == 'd2'] <- 'gender'
+names(data_2017_new)[names(data_2017_new) == 'd4'] <- 'educ'
+names(data_2017_new)[names(data_2017_new) == 'd13'] <- 'town'
+
+# View(data_2017_new)
+
+# Importing 2012 data, dropping not needed variables and relabeling variables
+
+data_2012 <- haven::read_dta("2012.dta")
+data_2012_new <- dplyr::select(data_2012, COUNTRY, q12, q13_1, q13_2, q14, q15, q18, q21_3, q21_4, vd1, d1r1, d2, vd4, d13)
+
+data_2012_new$year <- rep(2012, nrow(data_2012_new))
+names(data_2012_new)[names(data_2012_new) == 'COUNTRY'] <- 'country'
+names(data_2012_new)[names(data_2012_new) == 'q12'] <- 'prev_imp'
+names(data_2012_new)[names(data_2012_new) == 'q13_1'] <- 'conseq_country'
+names(data_2012_new)[names(data_2012_new) == 'q13_2'] <- 'conseq_you'
+names(data_2012_new)[names(data_2012_new) == 'q14'] <- 'eurosupp'
+names(data_2012_new)[names(data_2012_new) == 'q15'] <- 'intro_time_want'
+names(data_2012_new)[names(data_2012_new) == 'q18'] <- 'price_impact'
+names(data_2012_new)[names(data_2012_new) == 'q21_3'] <- 'lose_econpol'
+names(data_2012_new)[names(data_2012_new) == 'q21_4'] <- 'lose_ident'
+names(data_2012_new)[names(data_2012_new) == 'vd1'] <- 'age'
+names(data_2012_new)[names(data_2012_new) == 'd1r1'] <- 'agecat'
+names(data_2012_new)[names(data_2012_new) == 'd2'] <- 'gender'
+names(data_2012_new)[names(data_2012_new) == 'vd4'] <- 'educ'
+names(data_2012_new)[names(data_2012_new) == 'd13'] <- 'town'
+
+# View(data_2012_new)
+
+# Importing 2007 data, dropping not needed variables and relabeling variables
+
+data_2007 <- haven::read_dta("2007.dta")
+data_2007_new <- dplyr::select(data_2007, year, country, q17, q14, q13, q12, q16, q18, q22_c, q22_d, d1, d2, d2_r, d3, d6)
+
+names(data_2007_new)[names(data_2007_new) == 'q17'] <- 'prev_imp'
+names(data_2007_new)[names(data_2007_new) == 'q13'] <- 'conseq_country'
+names(data_2007_new)[names(data_2007_new) == 'q14'] <- 'conseq_you'
+names(data_2007_new)[names(data_2007_new) == 'q12'] <- 'eurosupp'
+names(data_2007_new)[names(data_2007_new) == 'q16'] <- 'intro_time_want'
+names(data_2007_new)[names(data_2007_new) == 'q18'] <- 'price_impact'
+names(data_2007_new)[names(data_2007_new) == 'q22_c'] <- 'lose_econpol'
+names(data_2007_new)[names(data_2007_new) == 'q22_d'] <- 'lose_ident'
+names(data_2007_new)[names(data_2007_new) == 'd2'] <- 'age'
+names(data_2007_new)[names(data_2007_new) == 'd2_r'] <- 'agecat'
+names(data_2007_new)[names(data_2007_new) == 'd1'] <- 'gender'
+names(data_2007_new)[names(data_2007_new) == 'd3'] <- 'educ'
+names(data_2007_new)[names(data_2007_new) == 'd6'] <- 'town'
+
+# View(data_2007_new)
+
+# 2007 data: Unifying Refusal/DK/NA-codes of independent variables as 5
+
+data_2007_new <- subset(data_2007_new, eurosupp!=9)
+
+data_2007_new$prev_imp[data_2007_new$prev_imp == 9] <- 5 
+data_2007_new$conseq_you[data_2007_new$conseq_you == 9] <- 5 
+data_2007_new$conseq_country[data_2007_new$conseq_country == 9] <- 5 
+data_2007_new$price_impact[data_2007_new$price_impact == 9] <- 5 
+data_2007_new$lose_econpol[data_2007_new$lose_econpol == 9] <- 5 
+data_2007_new$lose_ident[data_2007_new$lose_ident == 9] <- 5
+data_2007_new$intro_time_want[data_2007_new$intro_time_want == 9] <- 5
+
+# 2007 data: changing coding to fit other years and replacing 00 in educ
+
+data_2007_new$price_impact[data_2007_new$price_impact == 3] <- 4 
+data_2007_new$educ <- with ( data_2007_new, ifelse(educ == 00, age, educ))
+data_2007_new$town <- with ( data_2007_new, ifelse(town == 3, "rural", town))
+data_2007_new$town <- with ( data_2007_new, ifelse(town == 1, "city", town))
+data_2007_new$town <- with ( data_2007_new, ifelse(town == "rural", 1, town))
+data_2007_new$town <- with ( data_2007_new, ifelse(town == "city", 3, town))
+
+# 2012 data: changing coding to fit other years and replacing 00
+
+data_2012_new$intro_time_want[data_2012_new$intro_time_want == 4] <- 5
+data_2012_new$educ <- with ( data_2012_new, ifelse(educ == 00, age, educ))
+data_2012_new$lose_econpol <- with ( data_2012_new, ifelse(lose_econpol == 2, 1, lose_econpol))
+data_2012_new$lose_econpol <- with ( data_2012_new, ifelse(lose_econpol == 3, 2, lose_econpol))
+data_2012_new$lose_econpol <- with ( data_2012_new, ifelse(lose_econpol == 4, 2, lose_econpol))
+data_2012_new$lose_ident <- with ( data_2012_new, ifelse(lose_ident == 2, 1, lose_ident))
+data_2012_new$lose_ident <- with ( data_2012_new, ifelse(lose_ident == 3, 2, lose_ident))
+data_2012_new$lose_ident <- with ( data_2012_new, ifelse(lose_ident == 4, 2, lose_ident))
+data_2012_new$price_impact <- with ( data_2012_new, ifelse(price_impact == 2, 6, price_impact))
+data_2012_new$price_impact <- with ( data_2012_new, ifelse(price_impact == 3, 2, price_impact))
+
+# 2017 data: changing coding to fit other years and replacing 00
+
+data_2017_new$educ <- with ( data_2017_new, ifelse(educ == 00, age, educ))
+
+data_2017_new$lose_econpol <- with ( data_2017_new, ifelse(lose_econpol == 2, 1, lose_econpol))
+data_2017_new$lose_econpol <- with ( data_2017_new, ifelse(lose_econpol == 3, 2, lose_econpol))
+data_2017_new$lose_econpol <- with ( data_2017_new, ifelse(lose_econpol == 4, 2, lose_econpol))
+data_2017_new$lose_ident <- with ( data_2017_new, ifelse(lose_ident == 2, 1, lose_ident))
+data_2017_new$lose_ident <- with ( data_2017_new, ifelse(lose_ident == 3, 2, lose_ident))
+data_2017_new$lose_ident <- with ( data_2017_new, ifelse(lose_ident == 4, 2, lose_ident))
+data_2017_new$price_impact <- with ( data_2017_new, ifelse(price_impact == 2, 6, price_impact))
+data_2017_new$price_impact <- with ( data_2017_new, ifelse(price_impact == 3, 2, price_impact))
+
+# View(data_2007_new)
+# View(data_2012_new)
+# View(data_2017_new)
+
+# Dropping the countries that are not in all surveys
+
+# unique(data_2017_new$country)
+# unique(data_2012_new$country)
+# unique(data_2007_new$country)
+
+data_2017_final <- subset(data_2017_new, country!=17)
+data_2017_final <- subset(data_2017_final, country!=32)
+
+data_2012_final <- subset(data_2012_new, country!=23)
+data_2012_final <- subset(data_2012_final, country!=24)
+
+data_2007_final <- subset(data_2007_new, country!=19)
+data_2007_final <- subset(data_2007_final, country!=21)
+data_2007_final <- subset(data_2007_final, country!=23)
+data_2007_final <- subset(data_2007_final, country!=24)
+data_2007_final <- subset(data_2007_final, country!=25)
+data_2007_final <- subset(data_2007_final, country!=27)
+
+# unique(data_2017_final$country)
+# unique(data_2012_final$country)
+# unique(data_2007_final$country)
+
+# Binding together the dataframes from the three years
+
+finaldata <- rbind(data_2017_final, data_2012_final, data_2007_final)
+finaldata[] <- lapply(finaldata, unclass)
+
+# Renaming the values for countries into countries
+
+finaldata$country <- with ( finaldata, ifelse(country == 20, "CZ", ifelse(country == 22, "HU", ifelse(country == 26, "PL", ifelse(country == 29, "BG", ifelse(country == 30, "RO", country))))))
+
+finaldata$country <- as.factor(finaldata$country)
+
+# Coding the dependent variable as binary, 0 against, 1 in favor
+
+finaldata$eurosupp <- with ( finaldata, ifelse(eurosupp == 2, 1, eurosupp))
+finaldata$eurosupp <- with ( finaldata, ifelse(eurosupp == 3, 0, eurosupp))
+finaldata$eurosupp <- with ( finaldata, ifelse(eurosupp == 4, 0, eurosupp))
+
+summary(finaldata)
+
+# Getting rid of missings (also refusal / DK) in eurosupp (dependent variables) & sociodemographics
+
+finaldata <- subset(finaldata, !is.na(age))
+finaldata <- subset(finaldata, town < 4)
+finaldata <- subset(finaldata, educ < 98)
+finaldata <- subset(finaldata, gender < 3)
+finaldata <- subset(finaldata, age > 14)
+finaldata <- subset(finaldata, eurosupp < 4)
+
+# Evaluating the variable intro_time_want and changing the "never"-response into the "as late as possible"-response
+
+nrow(finaldata %>% 
+  filter(intro_time_want==4, year==2017))
+
+nrow(finaldata %>% 
+  filter(intro_time_want==3, year==2017))
+
+nrow(finaldata %>% 
+  filter(intro_time_want==3, year==2012))
+
+nrow(finaldata %>% 
+  filter(intro_time_want==3, year==2007))
+
+
+nrow(finaldata %>% 
+  filter(intro_time_want==2, year==2017))
+
+nrow(finaldata %>% 
+  filter(intro_time_want==2, year==2012))
+
+nrow(finaldata %>% 
+  filter(intro_time_want==2, year==2007))
+
+nrow(finaldata %>% 
+  filter(intro_time_want==1, year==2017))
+
+nrow(finaldata %>% 
+  filter(intro_time_want==1, year==2012))
+
+nrow(finaldata %>% 
+  filter(intro_time_want==1, year==2007))
+
+finaldata$intro_time_want <- with ( finaldata, ifelse(intro_time_want == 4, 3, intro_time_want))
+
+# # Evaluating the variable price impact and changing the "will help keep prices stable"-response into the "no impact"-response
+
+nrow(finaldata %>% 
+  filter(price_impact==6, year==2017))
+
+nrow(finaldata %>% 
+  filter(price_impact==6, year==2012))
+
+nrow(finaldata %>% 
+  filter(price_impact==4, year==2017))
+
+nrow(finaldata %>% 
+  filter(price_impact==4, year==2012))
+
+nrow(finaldata %>% 
+  filter(price_impact==4, year==2007))
+
+nrow(finaldata %>% 
+  filter(price_impact==2, year==2017))
+
+nrow(finaldata %>% 
+  filter(price_impact==2, year==2012))
+
+nrow(finaldata %>% 
+  filter(price_impact==2, year==2007))
+
+nrow(finaldata %>% 
+  filter(price_impact==1, year==2017))
+
+nrow(finaldata %>% 
+  filter(price_impact==1, year==2012))
+
+nrow(finaldata %>% 
+  filter(price_impact==1, year==2007))
+
+nrow(finaldata %>% 
+  filter(price_impact==1, year==2017))
+
+nrow(finaldata %>% 
+  filter(price_impact==1, year==2012))
+
+nrow(finaldata %>% 
+  filter(price_impact==1, year==2007))
+
+finaldata$price_impact <- with ( finaldata, ifelse(price_impact == 6, 4, price_impact))
+
+#
+
+finaldata$educ_cat <- with ( finaldata, ifelse(educ <= 16, 1, ifelse(educ <= 21, 2, 3)))
+
+# Factorizing the necessary variables
+
+finaldata$eurosupp <- as.factor(finaldata$eurosupp)
+finaldata$prev_imp <- as.factor(finaldata$prev_imp)
+finaldata$conseq_country <- as.factor(finaldata$conseq_country)
+finaldata$conseq_you <- as.factor(finaldata$conseq_you)
+finaldata$price_impact <- as.factor(finaldata$price_impact)
+finaldata$lose_econpol <- as.factor(finaldata$lose_econpol)
+finaldata$lose_ident <- as.factor(finaldata$lose_ident)
+finaldata$agecat <-as.factor(finaldata$agecat)
+finaldata$gender <- as.factor(finaldata$gender)
+finaldata$town <- as.factor(finaldata$town)
+finaldata$intro_time_want <- as.factor(finaldata$intro_time_want)
+finaldata$year <- as.factor(finaldata$year)
+finaldata$educ_cat <- as.factor(finaldata$educ_cat)
+
+finaldata$prev_imp <- factor(finaldata$prev_imp,
+levels = c(1,2,3,4,5),
+labels = c("Very positive", "Rather positive", "Rather negative", "Very negative", "DK/NA"))
+
+finaldata$conseq_country <- factor(finaldata$conseq_country,
+levels = c(1,2,3,4,5),
+labels = c("Very positive", "Rather positive", "Rather negative", "Very negative", "DK/NA"))
+
+finaldata$conseq_you <- factor(finaldata$conseq_you,
+levels = c(1,2,3,4,5),
+labels = c("Very positive", "Rather positive", "Rather negative", "Very negative", "DK/NA"))
+
+finaldata$eurosupp <- factor(finaldata$eurosupp,
+levels = c(0,1),
+labels = c("Against", "In favor"))
+
+finaldata$intro_time_want <- factor(finaldata$intro_time_want,
+levels = c(1,2,3,5),
+labels = c("ASAP", "AACT", "ALAP", "DK/NA"))
+
+finaldata$price_impact <- factor(finaldata$price_impact,
+levels = c(1,2,4,5),
+labels = c("Increase", "Lower", "No impact", "DK/NA"))
+
+finaldata$lose_econpol <- factor(finaldata$lose_econpol,
+levels = c(1,2,5),
+labels = c("Agree", "Disagree", "DK/NA"))
+
+finaldata$lose_ident <- factor(finaldata$lose_ident,
+levels = c(1,2,5),
+labels = c("Agree", "Disagree", "DK/NA"))
+
+finaldata$agecat <- factor(finaldata$agecat,
+levels = c(1,2,3,4),
+labels = c("15-24", "25-39", "49-54", "55+"))
+
+finaldata$gender <- factor(finaldata$gender,
+levels = c(1,2),
+labels = c("Male", "Female"))
+
+finaldata$educ_cat <- factor(finaldata$educ_cat,
+levels = c(1,2,3),
+labels = c("Low", "Medium", "High"))
+
+finaldata$town <- factor(finaldata$town,
+levels = c(1,2,3),
+labels = c("Rural", "Town", "City"))
+
+# Regression
+
+logit_out <- glm(eurosupp ~ prev_imp + conseq_you + conseq_country + price_impact + lose_econpol + lose_ident + age + gender + educ + town + country, family = binomial, data = finaldata)
+
+summary(logit_out)
+
+summary(finaldata)
+
+```
+
+# Introduction
+
+Ever since the Treaty of Maastricht from 1992 every Member State of the European Union is contractually obliged to introduce the Euro as its currency. While this obligation has hardly been strongly enforced in the past, the readiness of the individual countries, measured by the official criteria (complying with the debt and deficit criteria outlined by the Stability and Growth Pact, keeping inflation and long-term governmental interest rates below certain reference values, ensuring that national laws comply with the statutes of the European Central Bank and the European Systems of Central Banks as well as the articles 130 and 131 of the Treaty on the Functioning of the European Union and participating in the European Exchange Rate Mechanism II for a duration of at least two years), varies. But even if the countries were economically ready to join the Eurozone, they would still have to decide to politically. This decision relies largely on public opinion: if the respective governments decide to join the Euro, they will do so as elected representatives of their people (assuming democratic representation to be functional). It also possible, though, that national referenda would be held to determine the will of the people on this question.
+Since President of the European Commission Jean-Claude Juncker recently announced that he expects every EU Member State to join the Eurozone (Juncker, 2017), and the official documents of the Commission also imply as much (European Commission, 2017a and 2017b), examining the attitudes held in EU Member States outside the Eurozone appears a worthwhile endeavor.
+
+Starting from these premises, this papers analyses the key factors which influence popular opinion on adopting the Euro on European identity. Specifically, the research focuses on how certain expectations about the impact of adopting the Euro that the public as well as traditional socio-demographic variables such as age and education can explain the differences in support for the idea of Euro introduction at differents points in time and in different countries. The analysis covers five countries, Bulgaria, the Czech Republic, Hungary, Poland and Romania, at three moments in time, 2007 (data collected in September), 2012 (April) and 2017 (April). The choice of countries is determined both by availability of data (Croatia only joined the EU in 2013, Sweden was not always included in surveys) and other reasons (Denmark has an opt-out of the common currency, as would the UK, if it were staying in the EU). The points in time represent three political and economic paradigms: in 2007 (data collected in September), the EU economy was doing well, Romania and Bulgaria had just joined the EU and the ambitious project of completing the Lisbon Treaty was well underway. 2011/2012 marked the peak of the European sovereign debt crisis, bringing not only economic problems, contagion and bail-out obligations to the Eurozone, but also political disharmony. In 2017, the Euro's future is open: after the UK decided to leave the EU, both more integration, meaning burden-sharing, but also stability, as well as break-up of the common currency are on the table (during the collection of the data, break-up might have even been a more realistic scenario than now, since the French presidential election hadn't been held).
+
+The paper is structured as follows: section 2 provides an overview of the data and methodology applied; section 4 is dedicated to the descriptive and logistic regression analysis of the data; finally, section 5 is a reflection on the results of the analysis and on its limitations.
+
+
+# Data and methodology
+
+The data used in this paper comes from the Flash Eurobarometer survey on the Euro Area. The Flash Eurobarometer is a cross-national survey conducted on specific topics at the request of the European Commission, providing swift results. The research focuses on the surveys conducted in 2007, 2012 and 2017, with each country having a a sample size of roughly 1000 respondents for each of two years, resulting in 25063 observations. The analysis has been restricted to Bulgaria, the Czech Republic, Hungary, Poland and Romania. In order to successfully analyse the models, the missing information on the key variable of interests (attitude towards the introduction of the Euro) has been deleted. Furthermore, missing entries for age, gender, education and living area (city/rural) have also been deleted. As a result, the total sample used in the analysis comprises 13300 entries. 
+
+The methods employed in this research are descriptive statistics and the binary logistic regression. The outcome variable is constructed as a binary variable that distinguishes between respondents who are generally in favor of the idea of introducing the euro in their respective country, and those, who are against that idea.[^1]
+
+[^1]: In the 2007 survey, the question is actually whether the person is happy or not that the euro could replace their own national currency. This is assumed to be the same. The coding has been adjusted accordingly.
+
+Particularly, through the use of logistic regression, the attitudes towards the adoption of the Euro is explained in terms of socio-demographic variables such as age, gender, level of education[^2]  and type of community (metropolitan area, other urban centre, rural area)[^3] and country, as well as other variables which deal with the expectation or assessment of the public on the (possible future) impact of the Euro, namely: 
+  
+  - whether the Euro has had a (very or rather) positive or negative impact on the countries, which have already introduced it,
+  
+  - whether the the respondent expects (very or rather) positive or negative consequences of the introduction of the Euro for their own country,
+  
+  - whether the the respondent expects (very or rather) positive or negative consequences of the introduction of the Euro for them personally,
+  
+  - when they would like the Euro to become their currency[^4],
+  
+  - whether they think that the Euro would increase or decrease prices[^5],
+   
+  - whether they agree or disagree that adopting the euro will mean that their country will lose control over its economic policy,
+  
+  - whether they agree or disagree that adopting the euro will mean that their country will lose a great deal of its identity.
+  
+With these additional variables, the response categories have been matched up for the different years and adjusted for better anaylsis. For each, a category for "Don't know / NA" has been included, as deleting these answers would have resulted in a loss of a third to half of the sample, as suggested in other work (Horton & Kleinman, 2012).  
+  
+
+[^2]: The original education variable in the Flash Eurobarometer data set is measured in terms of the age at which the respondent left full-time education. In this research, the level of education is coded as a categorical variable with 3 realisations: low level, medium level, and high level, where the low level of education describes respondents who left full-time education when they were 16 or younger, the medium level describes those who left full-time education between the ages of 16 and 21, and the high level describes those who left full-time education after 21.
+
+[^3]: Descriptions of the types of communities varied over the years, but mean the same.
+
+[^4]: This variable has not been used in regression. For more explanation regarding this issue, please see the annex.
+
+[^5]: The question regarding the impact on prices the introduction of the Euro might have has changed over the years and an additional option indicating price stability has been added in 2012 and 2017. For the purposes of this analysis, the responses to the additional option "Will help keep prices stable" as well as the "No impact" responses will be put into one category. For more explanation regarding this issue, please see the annex.
+
+The analysis comprises two main parts. To begin with, the descriptive statistics for the data are presented in order to observe the variation of the dependent variable. The second part consists of logistic regression analysis including the samples for all countries and different models. The results are presented as odds ratios.
+
+# Analysis
+
+## Descriptive Analysis
+
+In general terms, men make up 43% of the sample, women 57%. Men tend to favor the idea of Euro introduction more (58% in favor, 42% against) than women (47% and 53%).
+Age differences do not seem to make a big difference (hardly 2%), except in the youngest age category of the 15-24 year-olds, where 58% favor the idea of Euro introduction, though this groups only makes up 9% of the sample altogether (25-39 year-olds: 22%, 49-54 year-olds: 27%, over 55 year-olds: 41% of the sample).
+
+The living area has almost no influence on support for the idea of Euro adoption, as it is evenly distributed, only the city dwellers are slightly more in favor (54%). In the sample, 26% of respondents live in rural areas, 42% in urban areas / towns and 32% in metropolitan areas / cities.
+
+<table>
+| eurosupp | gender | gender | agecat | agecat | agecat | agecat | town  | town | town | year | year | year |   |
+|---------------------|--------|--------|---------|---------|---------|---------|-------|------|------|------|------|------|---|
+|                     | Male   | Female | 15-24   | 25-39   | 49-54   | 55+     | Rural | Town | City | 2007 | 2012 | 2017 |   |
+| Against             | 42%    | 53%    | 42%     | 50%     | 49%     | 49%     | 50%   | 49%  | 46%  | 44%  | 52%  | 49%  |   |
+| In favor            | 58%    | 47%    | 58%     | 50%     | 51%     | 51%     | 50%   | 51%  | 54%  | 56%  | 48%  | 51%  |   |
+| Quantity    | 5778   | 7522   | 1243    | 2959    | 3594    | 5504    | 3433  | 5568 | 4299 | 4093 | 4688 | 4519 |   |
+</table>
+
+
+Bulgaria and Hungary have rather evenly distributed attitudes (54% and 57% in favor, respectively). The magnitude is the same in Poland, though the effect goes in the opposite direction (52% **against**). Romanians seem to heavily favor the idea of Euro adoption (70%), while the Czech hold the opposite opinion (71% **against**), see also Table 2 (Annex.)
+
+When interacting the socio-demographic variables, women between 15 and 24 years defy the trend of their gender, and favor the idea of Euro adoption at 56 % (47% age average), getting closer to their male peers in the same age group (60%). The biggest difference is in the age group of over 55 years olds, where men favor the idea of Euro adoption with 60% and women with only 45%. Otherwise, comparing age categories and gender gives no further insights worth mentioning (differences between age groups from the gender average are limited to 2-3 percentage points).
+
+When the gender variable is combined with the countries, the expected effect occurs: in each country, men tend to favor the idea of Euro adoption more than the average, women less so. This effect is particularly pronounced in Poland (average: 48%, men 58%, women: 40%) and the Czech Republic (average: 28%, men 36%, women: 23% in favor), a little less so in Bulgaria and Hungary (4 to 5 percentage points difference), and least in Romania (2 to 3 percentage points), see also Table 3 (Annex).
+
+When comparing country data with age categories, the age distribution of respondents is clear: the age groups 49 to 54 years and over 55 years largely coincide with the average, though in Hungary and Romania, not quite as closely. While overarching impacts of age are not immediately visible, the youngest are especially in favor in Hungary (11 points over the average), followed by Poland (5 points over the average) and Bulgaria and Romania (4 points). In the Czech Republic, where public opinion on the Euro hardly varies with age, the youngest are even 1 percentage point below average.
+
+In Bulgaria, the Czech Republic, Poland and Romania, town folk roughly matches the country average. In the Czech Republic and Poland, city dwellers favor the idea of Euro adoption more than the average (5 and 3 percentages points), whereas respondents in rural areas less so (7 and 6 points below country average). In Hungary and Romania, it is the other way around: metropolitans favor the idea of Euro adoption less than the country average (3 points) and respondents in rural areas more (2 points).
+
+
+```{r descriptive, include=FALSE}
+
+summary(finaldata)
+
+tab1 <- table(finaldata$country, finaldata$eurosupp)
+prop.table(tab1, 1)*100
+
+tab2<- table(finaldata$gender, finaldata$eurosupp)
+prop.table(tab2, 1)*100
+
+tab3<- table(finaldata$agecat, finaldata$eurosupp)
+prop.table(tab3, 1)*100
+
+tab4 <- table(finaldata$town, finaldata$eurosupp)
+prop.table(tab4, 1)*100
+
+tab5 <- table(finaldata$year, finaldata$eurosupp)
+prop.table(tab5, 1)*100
+
+tab12 <- table(finaldata$country, finaldata$gender, finaldata$eurosupp)
+tab12 <- ftable(tab12)
+prop.table(tab12, 1)*100
+
+tab13 <- table(finaldata$country, finaldata$agecat, finaldata$eurosupp)
+tab13 <- ftable(tab13)
+prop.table(tab13, 1)*100
+
+tab23 <- table(finaldata$gender, finaldata$agecat, finaldata$eurosupp)
+tab23 <- ftable(tab23)
+prop.table(tab23, 1)*100
+
+tab14 <- table(finaldata$country, finaldata$town, finaldata$eurosupp)
+tab14 <- ftable(tab14)
+prop.table(tab14, 1)*100
+
+# tab123 <- table(finaldata$country, finaldata$gender, finaldata$agecat, finaldata$eurosupp)
+# tab123 <- ftable(tab123)
+# prop.table(tab123, 1)*100
+
+
+
+```
+
+## Extended Multivariate Analysis
+
+### Model 1: Only socio-demographics and year
+
+In the first model, the support for the idea of Euro introduction is explained by the year, with socio-demographic variables and moderating factors. In general, it can be said that for the years 2012 and 2017, the odds of being in favor of the idea of introducing the Euro are 33% and 28% lower with regards to 2007, respectively. This suggests that 2012 was the year of the lowest support for the Euro, likely due to the crisis, whereas in 2017 support a bit higher, but still considerably lower than in 2007, perhaps reflecting the uncertainty about the future of the Euro, or (for both 2012 and 2017), the lack of the 2007 optimism.
+While each additional year of age just barely increases the odds (by 0,4%), the odds of being in favor of the idea of introducing the Euro are lower in all age categories in relation to the lowest age group (29%, 29%, 34%), as well as female in relation to male (39% lower), where as higher education categories (in relation to the lowest) and living in town or cities (in relation to rural areas) increases the odds (education: medium 17%, high 53%; town: 0,7%, city: 8%). As for the countries (all in relation to Bulgaria), being from the Czech Republic and Poland reduces the odds of being in favor by 67% and 23%, respectively, whereas for Hungary[^6] and Romania, they increase by 22% and 112%, respectively.
+
+[^6]: This is the only model, in which the estimated coefficient for Hungary is significant. In all following models, it is not.
+
+```{r logistical regression year model, include=FALSE}
+
+logit_1 <- glm(eurosupp ~ year + age + agecat + gender + educ_cat + town + country, family = binomial, data = finaldata)
+
+summary(logit_1)
+exp(coefficients(logit_1))-1
+
+# Log-Likelihood
+LogLik <- logLik(logit_1)
+LogLik
+
+# McFadden's Pseudo-R^2
+logit_1_empty <- glm(eurosupp ~ 1, family = binomial, data = finaldata) # estimate empty model 
+Pseudo_R2 <- 1 - (as.numeric(logLik(logit_1)))/(as.numeric(logLik(logit_1_empty)))
+Pseudo_R2
+
+# Likelihood ratio Chi-squared
+chi2_test_stat <- 2*(as.numeric(logLik(logit_1)) - as.numeric(logLik(logit_1_empty)))
+lr_test <- 1 - pchisq(chi2_test_stat, 1)
+chi2_test_stat
+lr_test
+
+
+```
+
+### Model 2: Previous impact
+
+In this model, the variable concerning the assessment of the impact of the Euro in the existing Eurozone is added. The variable categories each lower the odds of being in favor, in relation to judging the previous impact as very positive, though there is a considerable difference from positive to negative (rather positive: 35% lower, rather negative: 93%, very negative: 97%). In this model, the influence of the age categories all but disappears (each lowering the odds of being in favor by 0.2% to 1% only, in relation to the 15-24 year-olds). The predictor of being female (in relation to men) hardly changes, and living in a town (in relation to rural) now slightly decreases the odds of being in favor (0,6%) and living in a city now increases the odds by only 1,5%. The indicator for the Czech Republic stays the same, though with Hungary the odds of being in favor is 0,4% are lower than in Bulgaria (a change in sign and magnitude), whereas the effect in Poland is stronger (34% lower than in Bulgaria) and in Romania weaker (though still 83% higher than in Bulgaria) than in Model 1.
+
+```{r logistical regression previous impact model, include=FALSE}
+
+logit_2 <- glm(eurosupp ~ prev_imp + year + age + agecat + gender + educ_cat + town + country, family = binomial, data = finaldata)
+
+summary(logit_2)
+
+# To odds ratios
+exp(coefficients(logit_2))-1
+
+# Log-Likelihood
+LogLik <- logLik(logit_2)
+LogLik
+
+# McFadden's Pseudo-R^2
+logit_2_empty <- glm(eurosupp ~ 1, family = binomial, data = finaldata) # estimate empty model 
+Pseudo_R2 <- 1 - (as.numeric(logLik(logit_2)))/(as.numeric(logLik(logit_2_empty)))
+Pseudo_R2
+
+# Likelihood ratio Chi-squared
+chi2_test_stat <- 2*(as.numeric(logLik(logit_2)) - as.numeric(logLik(logit_2_empty)))
+lr_test <- 1 - pchisq(chi2_test_stat, 1)
+chi2_test_stat
+lr_test
+
+# Compare
+exp(coefficients(logit_2))-1
+exp(coefficients(logit_1))-1
+
+```
+
+### Model 3: Consequences for person and country
+
+In this model, the variables concerning the expected consequences for the respondent and for their country have been added. While for both variables, the odds of being in favor are expectedly lower for all categories (in relation to expecting very positive consequences), it's striking that the consequences for the person itself make more of an impact than those for the country, which is particularly visible with the "rather positive" category, which lowers the odds of being in favor by 42% for personal consequences, but only by 10% when considering the country. This finding can further be substantiated by running separate models, which indicate that the goodness of fit is slightly higher when considering only the consequence for the person.[^7]
+
+[^7]: Please see code for details or table 4 in the annex for a comparison of goodness of fit measures for all models.
+
+The  odds of being in favor increase in 2012 (in relation to 2007) by 29%, suggesting that the negative impact of the crisis is being explained by the expected negative consequences. In terms of the year 2017, the lower odds in comparison to 2007 from Model have been all but explained away (0,1% higher odds now). In terms of countries, the consequences variables have a strong influence on Hungary, which is now almost on par with Bulgaria (3,2% lower odds as compared with 22% lower odds in Model 1), and Romania, where odds of being in favour are now only 37% (Model 1: 112%) above Bulgaria's.
+
+```{r logistical regression consequences model, include=FALSE}
+
+logit_3 <- glm(eurosupp ~ conseq_you + conseq_country + year + age + agecat + gender + educ_cat + town + country, family = binomial, data = finaldata)
+
+summary(logit_3)
+exp(coefficients(logit_3))-1
+
+# Log-Likelihood
+LogLik <- logLik(logit_3)
+LogLik
+
+# McFadden's Pseudo-R^2
+logit_3_empty <- glm(eurosupp ~ 1, family = binomial, data = finaldata) # estimate empty model 
+Pseudo_R2 <- 1 - (as.numeric(logLik(logit_3)))/(as.numeric(logLik(logit_3_empty)))
+Pseudo_R2
+
+# Likelihood ratio Chi-squared
+chi2_test_stat <- 2*(as.numeric(logLik(logit_3)) - as.numeric(logLik(logit_3_empty)))
+lr_test <- 1 - pchisq(chi2_test_stat, 1)
+chi2_test_stat
+lr_test
+
+
+# Compare
+exp(coefficients(logit_3))-1
+exp(coefficients(logit_1))-1
+```
+
+
+```{r logistical regression consequences person model, include=FALSE}
+
+#### Model 3.1 Consequences for person only
+
+## The goodness of fit increases even more: Log-Likelihood: -5478.994 (df=20), McFadden's Pseudo-R^2 0.4052099 and Chi-Squared-Test: 7465.299. Likelihood-Ratio-Test: 0.
+
+logit_31 <- glm(eurosupp ~ conseq_you + year + age + agecat + gender + educ_cat + town + country, family = binomial, data = finaldata)
+
+summary(logit_31)
+exp(coefficients(logit_31))-1
+
+# Log-Likelihood
+LogLik <- logLik(logit_31)
+LogLik
+
+# McFadden's Pseudo-R^2
+logit_31_empty <- glm(eurosupp ~ 1, family = binomial, data = finaldata) # estimate empty model 
+Pseudo_R2 <- 1 - (as.numeric(logLik(logit_31)))/(as.numeric(logLik(logit_31_empty)))
+Pseudo_R2
+
+# Likelihood ratio Chi-squared
+chi2_test_stat <- 2*(as.numeric(logLik(logit_31)) - as.numeric(logLik(logit_31_empty)))
+lr_test <- 1 - pchisq(chi2_test_stat, 1)
+chi2_test_stat
+lr_test
+
+
+# Compare
+exp(coefficients(logit_31))-1
+exp(coefficients(logit_1))-1
+```
+
+
+```{r logistical regression consequences country model, include=FALSE}
+
+#### Model 3.2 Consequences for country only
+
+## The goodness of fit increases even more: Log-Likelihood: -5654.042 (df=20), McFadden's Pseudo-R^2 0.3862071 and Chi-Squared-Test: 7115.205, Likelihood-Ratio-Test: 0.
+
+logit_32 <- glm(eurosupp ~ conseq_country + year + age + agecat + gender + educ_cat + town + country, family = binomial, data = finaldata)
+
+summary(logit_32)
+exp(coefficients(logit_32))-1
+
+# Log-Likelihood
+LogLik <- logLik(logit_32)
+LogLik
+
+# McFadden's Pseudo-R^2
+logit_32_empty <- glm(eurosupp ~ 1, family = binomial, data = finaldata) # estimate empty model 
+Pseudo_R2 <- 1 - (as.numeric(logLik(logit_32)))/(as.numeric(logLik(logit_32_empty)))
+Pseudo_R2
+
+# Likelihood ratio Chi-squared
+chi2_test_stat <- 2*(as.numeric(logLik(logit_32)) - as.numeric(logLik(logit_32_empty)))
+lr_test <- 1 - pchisq(chi2_test_stat, 1)
+chi2_test_stat
+lr_test
+
+# Compare
+exp(coefficients(logit_32))-1
+exp(coefficients(logit_1))-1
+
+```
+
+### Model 4: Expected prices 
+
+In this model, the expectations with regard to the impact of Euro introduction on general prices plays a role. It increases the differences between 2007 and the other two years even more (compared to Model 1): respondents in 2012 and 2017 have 48% and 47% lower odds (than in 2007) of being in favour of Euro introduction, respectively. This could be interpreted to mean that the differences in support for the Euro are, in fact, higher than initially evident from Model 1.
+
+It changes the odds ratios for the country indicators in relation to Bulgaria, particularly in Hungary, whose odds are now almost on par with Bulgaria (as opposed to 22% higher, as in Model 1) and Romania, whose odds are now only 66% (Model 1: 118%) higher than those of Bulgaria. 
+
+```{r logistical regression expected prices model, include=FALSE}
+
+logit_4 <- glm(eurosupp ~ price_impact + year + age + agecat + gender + educ_cat + town + country, family = binomial, data = finaldata)
+
+summary(logit_4)
+exp(coefficients(logit_4))-1
+
+# Log-Likelihood
+LogLik <- logLik(logit_4)
+LogLik
+
+# McFadden's Pseudo-R^2
+logit_4_empty <- glm(eurosupp ~ 1, family = binomial, data = finaldata) # estimate empty model 
+Pseudo_R2 <- 1 - (as.numeric(logLik(logit_4)))/(as.numeric(logLik(logit_4_empty)))
+Pseudo_R2
+
+# Likelihood ratio Chi-squared
+chi2_test_stat <- 2*(as.numeric(logLik(logit_4)) - as.numeric(logLik(logit_4_empty)))
+lr_test <- 1 - pchisq(chi2_test_stat, 1)
+chi2_test_stat
+lr_test
+
+# Compare
+exp(coefficients(logit_4))-1
+exp(coefficients(logit_1))-1
+
+```
+
+### Model 5: Losing control of economic policy
+
+In this model, a variable is include, which indicates whether respondents think that introducing the Euro will cause their country to lose control of its economic policy. This causes the odds to be in favour in 2012 to 2017 to not be as low compared to 2007 as in Model 1, particularly for 2017, possibly indicating that the recent talks of stronger integration may have a deterrent effect. The odds of Poland and Hungary (though not significantly) also decrease considerably in relation to Bulgaria. Interestingly, the odds of the two older age groups decrease even more (in relation to the youngest). This would indicate that economic policy is most important for the youngest.
+
+```{r logistical regression lose econpol model, include=FALSE}
+
+logit_5 <- glm(eurosupp ~ lose_econpol + year + age + agecat + gender + educ_cat + town + country, family = binomial, data = finaldata)
+
+summary(logit_5)
+exp(coefficients(logit_5))-1
+
+# Log-Likelihood
+LogLik <- logLik(logit_5)
+LogLik
+
+# McFadden's Pseudo-R^2
+logit_5_empty <- glm(eurosupp ~ 1, family = binomial, data = finaldata) # estimate empty model 
+Pseudo_R2 <- 1 - (as.numeric(logLik(logit_5)))/(as.numeric(logLik(logit_5_empty)))
+Pseudo_R2
+
+# Likelihood ratio Chi-squared
+chi2_test_stat <- 2*(as.numeric(logLik(logit_5)) - as.numeric(logLik(logit_5_empty)))
+lr_test <- 1 - pchisq(chi2_test_stat, 1)
+chi2_test_stat
+lr_test
+
+# Compare
+exp(coefficients(logit_5))-1
+exp(coefficients(logit_1))-1
+
+```
+
+### Model 6: Losing national identity
+
+This model is similar to Model 5, for one, in so far, as it investiages, respondents answer to the notion that Euro introdution will cause their country to lose a great deal of its national identity, but also because the effect on year variables as well as the two oldest age categories (here also extending to the second youngest) is similar to the effects observed in Model 5. Effects on countries are also similar to Model 5, the lower odds (in relation to Bulgaria) to be favor of Euro introduction decrease even more for Hungary (not significant), Poland and Romania (in comparison to Model 1).
+
+```{r logistical regression lose ident model, include=FALSE}
+
+logit_6 <- glm(eurosupp ~ lose_ident + year + age + agecat + gender + educ_cat + town + country, family = binomial, data = finaldata)
+
+summary(logit_6)
+exp(coefficients(logit_6))-1
+
+# Log-Likelihood
+LogLik <- logLik(logit_6)
+LogLik
+
+# McFadden's Pseudo-R^2
+logit_6_empty <- glm(eurosupp ~ 1, family = binomial, data = finaldata) # estimate empty model 
+Pseudo_R2 <- 1 - (as.numeric(logLik(logit_6)))/(as.numeric(logLik(logit_6_empty)))
+Pseudo_R2
+
+# Likelihood ratio Chi-squared
+chi2_test_stat <- 2*(as.numeric(logLik(logit_6)) - as.numeric(logLik(logit_6_empty)))
+lr_test <- 1 - pchisq(chi2_test_stat, 1)
+chi2_test_stat
+lr_test
+
+# Comparing
+exp(coefficients(logit_6))-1
+exp(coefficients(logit_1))-1
+
+```
+
+# Conclusion and outlook
+
+It appears that, while each model with its individual variables has some influence on the initial variables, particularly the country variables, Model 3 seems to reveal best why support for the idea of Euro introduction varies between the years: largely due to people worrying about the consequences of joining the common currency when the currency is in crisis or its future is uncertain. However, further analysis would be needed to get more meaningful results.
+
+Certainly worth further analysis might be, firstly, to investigate, in how far differences in support for Euro introduction between countries can be explained by the given variables and/or others and, secondly, to investigate the answers of those respondents who were in favor of the idea of Euro introduction to the question of when they would like the Euro to be introduced and in how far, and why, their responses vary with the given variables.
+
+# Bibliography
+
+EUROPEAN COMMISSION (2008): Flash Eurobarometer 214 (Introduction of the Euro in the New Member States). The GALLUP Organisation, Brussels. GESIS Data Archive, Cologne. ZA4732 Data file Version 1.0.0, doi:10.4232/1.4732
+
+EUROPEAN COMMISSION (2013): Flash Eurobarometer 349 (Introduction of the Euro in the New Member States, wave 14). TNS Political & Social [producer]. GESIS Data Archive, Cologne. ZA5784 Data file Version 1.0.0, doi:10.4232/1.11637
+
+EUROPEAN COMMISSION (2017a): White Paper on the Future of Europe - Reflections and scenarios for the EU27 by 2025. Brussels. 1 March 2017
+
+EUROPEAN COMMISSION (2017b): Reflection Paper on the Deepening of the Economic and Monetary Union. Brussels. 31 May 2017
+
+EUROPEAN COMMISSION (2017c): Flash Eurobarometer 453 (Introduction of the Euro in the Member States That Have Not Yet Adopted the Common Currency). TNS opinion, Brussels [producer]. GESIS Data Archive, Cologne. ZA6859 Data file Version 1.0.0, doi:10.4232/1.12790
+
+HORTON, N. & KLEINMAN, K. (2007): Much Ado About Nothing - A Comparison of Missing Data Methods and Software to Fit Incomplete Data Regression Models. The American Statistican, 61(1), pp. 79-90. doi:10.1198/000313007X172556
+
+JUNCKER, J. (2017): President Jean-Claude Juncker's State Of The Union Address 2017. Brussels. 13.09.2017. http://europa.eu/rapid/press-release_SPEECH-17-3165_en.htm, Last accessed: 07.01.2017
+
+# ANNEX
+
+## Graphs and tables
+
+### Table 2 - Countries / In favor
+
+<table>
+| Country | In favor | 
+|---------|-----------|
+| BG      | 54.25331  |
+| CZ      | 28.58209  |
+| HU      | 57.52608  |
+| PL      | 47.86293  |
+| RO      | 70.81878  |
+</table>
+
+### Table 3 - Countries & Gender / Against or in favor
+
+<table>
+| Country | Gender | Against  | In favor |
+|---------|--------|----------|-----------|
+| BG      | Male   | 39.33962 | 60.66038  |
+| BG      | Female | 50.03155 | 49.96845  |
+| CZ      | Male   | 64.30894 | 35.69106  |
+| CZ      | Female | 77.44828 | 22.55172  |
+| HU      |  Male  | 37.07052 | 62.92948  |
+| HU      | Female | 46.26109 | 53.73891  |
+| PL      | Male   | 42.10084 | 57.89916  |
+| PL      | Female | 59.97375 | 40.02625  |
+| RO      | Male   | 25.92282 | 74.07718  |
+| RO      | Female | 31.98556 | 68.01444  |
+</table>
+
+### Table 4 - Goodness of it measures
+
+<table>
+|                                        | Model 1         | Model 2           | Model 3           | Model 3.1         |
+|----------------------------------------|-----------------|-------------------|-------------------|-------------------|
+| Log-Likelihood stat                    | -8521.04(df=16) | -6924.064 (df=20) | -4991.541 (df=24) | -5478.994 (df=20) |
+| McFadden's Pseudo R^2                  | 0.07497073      | 0.2483357         | 0.458127          | 0.4052099         |
+| Likelihood ratio Chi-squared test stat | 1381.207        | 4575.161          | 8440.206          | 7465.299          |
+| Likelihood ratio test                  | 0               | 0                 | 0                 | 0                 |
+</table>
+
+<table>
+|                                        | Model 3.2         | Model 4           | Model 5           | Model 6           | Model Full        |
+|----------------------------------------|-------------------|-------------------|-------------------|-------------------|-------------------|
+| Log-Likelihood stat                    | -5654.042 (df=20) | -7745.941 (df=19) | -7953.908 (df=18) | -7938.403 (df=18) | -4669.877 (df=35) |
+| McFadden's Pseudo R^2                  | 0.3862071         | 0.1591142         | 0.1365376         | 0.1382209         | 0.4930463         |
+| Likelihood ratio Chi-squared test stat | 7115.205          | 2931.407          | 2515.472          | 2546.483          | 9083.534          |
+| Likelihood ratio test                  | 0                 | 0                 | 0                 | 0                 | 0                 |
+</table>
+
+## Footnotes
+
+### Annex to Footnote 4
+
+The question regarding the time in which the respondent would like the Euro to be introduced ("When would you like the euro to become your currency?") has been changed to include an option "Never" in 2017 (which it didn't in 2007 and 2012). While noteworthy in political terms (by way of the Treaties and the most recent official documents from the European Commission, the Member States in question are still expected to join the common currency eventually), it also causes issues with the evaluation. This new option has been chosen by 1172 respondents. It is reasonable to suppose that respondents who might have chosen "Never", had it been available before, chose "as late as possible" in the previous years, as can be assumed from the number of respondents who chose that category in each of the years: 2017: 948, 2012: 2121, 2007: 1295. While the number of respondents who chose "as late as possible" almost doubled between 2007 and 2012 (the Euro crisis being a likely candidate as an explanatory factor), in 2017 "only" 948 respondents chose "as late as possible", whereas 1172 chose "never". Together, these numbers add up to 2120, almost exactly the same number of respondents who chose "as late as possible" in 2012. The frequency of the remaining answers ("after a certain time" increases somewhat from 1572 in 2007 to 1648 in 2012, but bounces back to 1588 in 2017, while "as soon as possible" decreases from 1179 in 2007 to 845 in 2012 and is 987 in 2017) do not seem to be influenced by the inclusion of the option "never" in 2017 as much. It is therefore assumed that the the responses "never" from 2017 could be attributed to "as late as possible" for the purposes of this analysis.
+
+However, this variable has not been used in the regression. At the outset of the paper, the idea was to additionally include  multinomial regression models with this variable as the dependent variable. Unfortunately, this exceeds the scope of this paper.
+
+### Annex to Footnote 5
+
+The question regarding the impact on prices the introduction of the Euro might have, has changed from "Do you think the euro will increase prices in [COUNTRY] when it is first introduced or, on the contrary, it will lower prices?" in 2007 to "What impact, if any, do you think the introduction of the euro will have on prices in (OUR COUNTRY)?" in 2012 and 2017. Additionally, a new response option was given, namely "Will help keep prices stable", while the neutral "Will lower prices" was changed to "Will help reduce prices". The third option "Will increase prices" remained the same. The new category "Will help keep prices stable" was chosen by 1136 and 1000 respondents in 2017 and 2012, respectively. The answer "No impact" (not given as an explicit option, but noted as a spontaneous reaction from the respondent, distincly from "Don't know / No answer") was chosen strikingly less often in 2012 and 2017 (85 and 77 times, respectively) than in 2007 (423), where no additional option with regards to price stability was available. The responses "Will increase prices" (2007: 3234, 2012: 3319, 2017: 3131) and "Will lower prices"/"Will help reduce prices" (2007: 258, 2012: 201, 2017: 219) do not seem to be affected by the additional option. For the purposes of this analysis, the responses to the additional option "Will help keep prices stable" as well as the "No impact" responses will be put into one category. Furthermore, the responses "Will lower prices" from 2007 and "Will help reduce prices" from 2012 and 2017 are assumed equal despite the positive connotation the latter carries.
+
+## Additional models
+
+### Full model: All variables
+
+McFadden's Pseudo R^2 gives a value of 0.4930463, which means that the model has a very good fit (explains the depedent variable very well) - McFadden himself says that values between 0.2 and 0.4 already constitute an excellent fit.
+
+```{r logistical regression full model, include=FALSE}
+
+logit_full <- glm(eurosupp ~ year + prev_imp + conseq_country + conseq_you + price_impact + lose_econpol + lose_ident + age + agecat + gender + educ_cat + town + country, family = binomial, data = finaldata)
+
+summary(logit_full)
+exp(coefficients(logit_full))
+
+# Log-Likelihood
+LogLik <- logLik(logit_full)
+LogLik
+
+# McFadden's Pseudo-R^2
+logit_full_empty <- glm(eurosupp ~ 1, family = binomial, data = finaldata) # estimate empty model 
+Pseudo_R2 <- 1 - (as.numeric(logLik(logit_full)))/(as.numeric(logLik(logit_full_empty)))
+Pseudo_R2
+
+# Likelihood ratio Chi-squared
+chi2_test_stat <- 2*(as.numeric(logLik(logit_full)) - as.numeric(logLik(logit_full_empty)))
+lr_test <- 1 - pchisq(chi2_test_stat, 1)
+chi2_test_stat
+lr_test
+
+
+```

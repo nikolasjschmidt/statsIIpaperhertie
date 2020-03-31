@@ -13,7 +13,7 @@ Content of the repository:
 
 
 ## Author:
-This paper was submitted by Nikolas Schmidt on 7 January 2018 as part of the course "Statistics II: Time Series, Panel Data and Limited Dependent Variables (with R)", which took place at the Hertie School of Governance at the Fall Semester 2017.
+This paper was submitted by Nikolas Schmidt in January 2018 as part of the course "Statistics II: Time Series, Panel Data and Limited Dependent Variables (with R)", which took place at the Hertie School of Governance at the Fall Semester 2017.
 
 
 

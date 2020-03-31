@@ -1,11 +1,14 @@
 ---
 title: "Attitudes towards the Euro in non-Euro new EU Member States"
-author: "Nikolas Schmidt"
-date: "8 Januar 2018"
+subtitle: "Final Paper in the course 'Statistics II: Time Series, Panel Data and Limited Dependent Variables (with R)' (Hertie School of Governance, Fall Term 2017)"
+author: "Author: Nikolas Schmidt"
+date: "Submitted: 8 Januar 2018"
 output:
   pdf_document:
     latex_engine: xelatex
     number_sections: yes
+    toc: yes
+    toc_depth: 2
   html_document:
     df_print: paged
 linestretch: 1.5
@@ -351,13 +354,14 @@ summary(logit_out)
 summary(finaldata)
 
 ```
-
+\newpage
 # Introduction
 
 Ever since the Treaty of Maastricht from 1992 every Member State of the European Union is contractually obliged to introduce the Euro as its currency. While this obligation has hardly been strongly enforced in the past, the readiness of the individual countries, measured by the official criteria (complying with the debt and deficit criteria outlined by the Stability and Growth Pact, keeping inflation and long-term governmental interest rates below certain reference values, ensuring that national laws comply with the statutes of the European Central Bank and the European Systems of Central Banks as well as the articles 130 and 131 of the Treaty on the Functioning of the European Union and participating in the European Exchange Rate Mechanism II for a duration of at least two years), varies. But even if the countries were economically ready to join the Eurozone, they would still have to decide to politically. This decision relies largely on public opinion: if the respective governments decide to join the Euro, they will do so as elected representatives of their people (assuming democratic representation to be functional). It also possible, though, that national referenda would be held to determine the will of the people on this question.
 Since President of the European Commission Jean-Claude Juncker recently announced that he expects every EU Member State to join the Eurozone (Juncker, 2017), and the official documents of the Commission also imply as much (European Commission, 2017a and 2017b), examining the attitudes held in EU Member States outside the Eurozone appears a worthwhile endeavor.
+\newpage
 
-Starting from these premises, this papers analyses the key factors which influence popular opinion on adopting the Euro on European identity. Specifically, the research focuses on how certain expectations about the impact of adopting the Euro that the public as well as traditional socio-demographic variables such as age and education can explain the differences in support for the idea of Euro introduction at differents points in time and in different countries. The analysis covers five countries, Bulgaria, the Czech Republic, Hungary, Poland and Romania, at three moments in time, 2007 (data collected in September), 2012 (April) and 2017 (April). The choice of countries is determined both by availability of data (Croatia only joined the EU in 2013, Sweden was not always included in surveys) and other reasons (Denmark has an opt-out of the common currency, as would the UK, if it were staying in the EU). The points in time represent three political and economic paradigms: in 2007 (data collected in September), the EU economy was doing well, Romania and Bulgaria had just joined the EU and the ambitious project of completing the Lisbon Treaty was well underway. 2011/2012 marked the peak of the European sovereign debt crisis, bringing not only economic problems, contagion and bail-out obligations to the Eurozone, but also political disharmony. In 2017, the Euro's future is open: after the UK decided to leave the EU, both more integration, meaning burden-sharing, but also stability, as well as break-up of the common currency are on the table (during the collection of the data, break-up might have even been a more realistic scenario than now, since the French presidential election hadn't been held).
+Starting from these premises, this paper analyses the key factors which influence popular opinion on adopting the Euro on European identity. Specifically, the research focuses on how certain expectations about the impact of adopting the Euro that the public as well as traditional socio-demographic variables such as age and education can explain the differences in support for the idea of Euro introduction at differents points in time and in different countries. The analysis covers five countries, Bulgaria, the Czech Republic, Hungary, Poland and Romania, at three moments in time, 2007 (data collected in September), 2012 (April) and 2017 (April). The choice of countries is determined both by availability of data (Croatia only joined the EU in 2013, Sweden was not always included in surveys) and other reasons (Denmark has an opt-out of the common currency, as would the UK, if it were staying in the EU). The points in time represent three political and economic paradigms: in 2007 (data collected in September), the EU economy was doing well, Romania and Bulgaria had just joined the EU and the ambitious project of completing the Lisbon Treaty was well underway. 2011/2012 marked the peak of the European sovereign debt crisis, bringing not only economic problems, contagion and bail-out obligations to the Eurozone, but also political disharmony. In 2017, the Euro's future is open: after the UK decided to leave the EU, both more integration, meaning burden-sharing, but also stability, as well as break-up of the common currency are on the table (during the collection of the data, break-up might have even been a more realistic scenario than now, since the French presidential election hadn't been held).
 
 The paper is structured as follows: section 2 provides an overview of the data and methodology applied; section 4 is dedicated to the descriptive and logistic regression analysis of the data; finally, section 5 is a reflection on the results of the analysis and on its limitations.
 
@@ -407,6 +411,7 @@ In general terms, men make up 43% of the sample, women 57%. Men tend to favor th
 Age differences do not seem to make a big difference (hardly 2%), except in the youngest age category of the 15-24 year-olds, where 58% favor the idea of Euro introduction, though this groups only makes up 9% of the sample altogether (25-39 year-olds: 22%, 49-54 year-olds: 27%, over 55 year-olds: 41% of the sample).
 
 The living area has almost no influence on support for the idea of Euro adoption, as it is evenly distributed, only the city dwellers are slightly more in favor (54%). In the sample, 26% of respondents live in rural areas, 42% in urban areas / towns and 32% in metropolitan areas / cities.
+\newpage
 
 <table>
 | eurosupp | gender | gender | agecat | agecat | agecat | agecat | town  | town | town | year | year | year |   |
@@ -745,6 +750,7 @@ exp(coefficients(logit_1))-1
 It appears that, while each model with its individual variables has some influence on the initial variables, particularly the country variables, Model 3 seems to reveal best why support for the idea of Euro introduction varies between the years: largely due to people worrying about the consequences of joining the common currency when the currency is in crisis or its future is uncertain. However, further analysis would be needed to get more meaningful results.
 
 Certainly worth further analysis might be, firstly, to investigate, in how far differences in support for Euro introduction between countries can be explained by the given variables and/or others and, secondly, to investigate the answers of those respondents who were in favor of the idea of Euro introduction to the question of when they would like the Euro to be introduced and in how far, and why, their responses vary with the given variables.
+\newpage
 
 # Bibliography
 
@@ -762,7 +768,9 @@ HORTON, N. & KLEINMAN, K. (2007): Much Ado About Nothing - A Comparison of Missi
 
 JUNCKER, J. (2017): President Jean-Claude Juncker's State Of The Union Address 2017. Brussels. 13.09.2017. http://europa.eu/rapid/press-release_SPEECH-17-3165_en.htm, Last accessed: 07.01.2017
 
-# ANNEX
+\newpage
+
+# Annex
 
 ## Graphs and tables
 
